@@ -1,4 +1,4 @@
-import 'package:cryptocoins/moedas_page.dart';
+import 'package:cryptocoins/pages/moedas_page.dart';
 import 'package:flutter/material.dart';
 
 class MeuAplicativo extends StatelessWidget {
