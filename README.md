@@ -1,10 +1,12 @@
-# cryptocoins
+# CryptoCoins
 
-A new Flutter project.
+CryptoCoins é um aplicativo conversor de crypto moedas.
 
-## Getting Started
+## Objetivo
 
-This project is a starting point for a Flutter application.
+O objetivo desse aplicativo é aprimorar os conhecimentos utilizando a linguagem flutter e dart, utilizando:
+
+- Listview...
 
 A few resources to get you started if this is your first Flutter project:
 
