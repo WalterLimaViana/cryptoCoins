@@ -1,10 +1,11 @@
 import 'package:cryptocoins/models/moeda.dart';
+import 'package:cryptocoins/pages/moedas_detalhes_page.dart';
 import 'package:cryptocoins/repositories/moeda_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class MoedasPage extends StatefulWidget {
-  const MoedasPage({Key? key}) : super(key: key);
+  MoedasPage({Key? key}) : super(key: key);
 
   @override
   State<MoedasPage> createState() => _MoedasPageState();
@@ -49,6 +50,15 @@ class _MoedasPageState extends State<MoedasPage> {
     }
   }
 
+  mostrarDetalhes(Moeda moeda) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => MoedasDetalhesPage(
+                  moeda: moeda,
+                )));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,6 +88,7 @@ class _MoedasPageState extends State<MoedasPage> {
                         : selecionadas.add(tabela[moeda]);
                   });
                 },
+                onTap: mostrarDetalhes(tabela[moeda]),
               );
             },
             padding: EdgeInsets.all(16),
