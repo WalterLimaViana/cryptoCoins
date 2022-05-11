@@ -14,12 +14,45 @@ class _MoedasPageState extends State<MoedasPage> {
   final tabela = MoedaRepository.tabela;
   NumberFormat real = NumberFormat.currency(locale: 'pt_BR', name: 'R\$');
   List<Moeda> selecionadas = [];
+
+  appBarDinamica() {
+    if (selecionadas.isEmpty) {
+      return AppBar(
+        title: Center(child: Text('Crypto Coins')),
+      );
+    } else {
+      return AppBar(
+        leading: IconButton(
+            onPressed: () {
+              setState(() {
+                selecionadas = [];
+              });
+            },
+            icon: Icon(Icons.arrow_back)),
+        title: Text('${selecionadas.length} selecionadas'),
+        backgroundColor: Colors.blueGrey[50],
+        elevation: 1,
+        iconTheme: IconThemeData(color: Colors.black87),
+        toolbarTextStyle: TextTheme(
+                headline6: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold))
+            .bodyText2,
+        titleTextStyle: TextTheme(
+                headline6: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold))
+            .headline6,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text('Crypto Coins')),
-        ),
+        appBar: appBarDinamica(),
         body: ListView.separated(
             itemBuilder: (BuildContext context, int moeda) {
               return ListTile(
@@ -49,6 +82,17 @@ class _MoedasPageState extends State<MoedasPage> {
             },
             padding: EdgeInsets.all(16),
             separatorBuilder: (_, ___) => Divider(),
-            itemCount: tabela.length));
+            itemCount: tabela.length),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: selecionadas.isNotEmpty
+            ? FloatingActionButton.extended(
+                onPressed: () {},
+                icon: Icon(Icons.star),
+                label: Text('FAVORITAR',
+                    style: TextStyle(
+                      letterSpacing: 0,
+                      fontWeight: FontWeight.bold,
+                    )))
+            : null);
   }
 }
