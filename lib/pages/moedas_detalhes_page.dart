@@ -6,16 +6,28 @@ class MoedasDetalhesPage extends StatefulWidget {
   MoedasDetalhesPage({Key? key, required this.moeda}) : super(key: key);
 
   @override
-  State<MoedasDetalhesPage> createState() => _MoedasDetalhesPageState();
+  _MoedasDetalhesPageState createState() => _MoedasDetalhesPageState();
 }
 
 class _MoedasDetalhesPageState extends State<MoedasDetalhesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.moeda.name),
-      ),
-    );
+        appBar: AppBar(
+          title: Center(child: Text(widget.moeda.name)),
+        ),
+        body: Column(
+          children: [
+            Divider(),
+            Row(
+              children: [
+                Image.asset(
+                  widget.moeda.icone,
+                  width: 40,
+                ),
+              ],
+            )
+          ],
+        ));
   }
 }

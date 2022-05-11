@@ -8,7 +8,7 @@ class MoedasPage extends StatefulWidget {
   MoedasPage({Key? key}) : super(key: key);
 
   @override
-  State<MoedasPage> createState() => _MoedasPageState();
+  _MoedasPageState createState() => _MoedasPageState();
 }
 
 class _MoedasPageState extends State<MoedasPage> {
@@ -66,30 +66,31 @@ class _MoedasPageState extends State<MoedasPage> {
         body: ListView.separated(
             itemBuilder: (BuildContext context, int moeda) {
               return ListTile(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                leading: (selecionadas.contains(tabela[moeda]))
-                    ? CircleAvatar(
-                        child: Icon(Icons.check),
-                      )
-                    : SizedBox(
-                        child: Image.asset(tabela[moeda].icone), width: 40),
-                title: Text(tabela[moeda].name,
-                    style:
-                        TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
-                trailing: Text(real.format(tabela[moeda].preco)),
-                selected: selecionadas.contains(tabela[moeda]),
-                selectedColor: Colors.indigo[50],
-                onLongPress: () {
-                  setState(() {
-                    selecionadas.contains(tabela[moeda])
-                        ? selecionadas.remove(tabela[moeda])
-                        : selecionadas.add(tabela[moeda]);
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  leading: (selecionadas.contains(tabela[moeda]))
+                      ? CircleAvatar(
+                          child: Icon(Icons.check),
+                        )
+                      : SizedBox(
+                          child: Image.asset(tabela[moeda].icone), width: 40),
+                  title: Text(tabela[moeda].name,
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.w500)),
+                  trailing: Text(real.format(tabela[moeda].preco)),
+                  selected: selecionadas.contains(tabela[moeda]),
+                  selectedColor: Colors.indigo[50],
+                  onLongPress: () {
+                    setState(() {
+                      selecionadas.contains(tabela[moeda])
+                          ? selecionadas.remove(tabela[moeda])
+                          : selecionadas.add(tabela[moeda]);
+                    });
+                  },
+                  onTap: () {
+                    mostrarDetalhes(tabela[moeda]);
                   });
-                },
-                onTap: mostrarDetalhes(tabela[moeda]),
-              );
             },
             padding: EdgeInsets.all(16),
             separatorBuilder: (_, ___) => Divider(),
