@@ -19,13 +19,34 @@ class _HomePageState extends State<HomePage> {
     pc = PageController(initialPage: paginaAtual);
   }
 
+  setPaginaAtual(pagina) {
+    setState(() {
+      paginaAtual = pagina;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(controller: pc, children: [
-        MoedasPage(),
-        FavoritesPage(),
-      ]),
+      body: PageView(
+        controller: pc,
+        children: [
+          MoedasPage(),
+          FavoritesPage(),
+        ],
+        onPageChanged: setPaginaAtual,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: paginaAtual,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Todas'),
+          BottomNavigationBarItem(icon: Icon(Icons.star), label: 'Favoritas')
+        ],
+        onTap: (pagina) {
+          pc.animateToPage(pagina,
+              duration: Duration(microseconds: 400), curve: Curves.ease);
+        },
+      ),
     );
   }
 }
