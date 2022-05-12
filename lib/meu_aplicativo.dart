@@ -11,7 +11,7 @@ class MeuAplicativo extends StatelessWidget {
       title: 'CryptoCoins',
       debugShowMaterialGrid: false,
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: Colors.blue,
       ),
       home: HomePage(),
     );
