@@ -1,3 +1,4 @@
+import 'package:cryptocoins/pages/configuracoes_page.dart';
 import 'package:cryptocoins/pages/favoritas_page.dart';
 import 'package:cryptocoins/pages/moedas_page.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             MoedasPage(),
             FavoritesPage(),
+            ConfiguracoesPage(),
           ],
           onPageChanged: setPaginaAtual,
         ),
@@ -67,7 +69,9 @@ class _HomePageState extends State<HomePage> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.star),
                 label: 'Favoritas',
-              )
+              ),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.settings), label: 'Contas')
             ],
             onTap: (pagina) {
               pc.animateToPage(pagina,
