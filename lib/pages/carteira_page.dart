@@ -66,6 +66,51 @@ class _CarteiraPageState extends State<CarteiraPage> {
     });
   }
 
+  setGraficoDados(int index) {
+    if (index < 0) return;
+    if (index == carteira.length) {
+      graficoLabel = 'Saldo';
+      graficoValor = conta.saldo;
+    } else {
+      graficoLabel = carteira[index].moeda.name;
+      graficoValor = carteira[index].moeda.preco * carteira[index].quantidade;
+    }
+  }
+
+  loadCarteira() {
+    setGraficoDados(index);
+    carteira = conta.carteira;
+    final tamanhoLista = carteira.length + 1;
+
+    return List.generate(tamanhoLista, (i) {
+      final isTouched = i == index;
+      final isSaldo = i == tamanhoLista - 1;
+      final fontSize = isTouched ? 18.0 : 14.0;
+      final radius = isTouched ? 60.0 : 50.0;
+      final color = isTouched ? Colors.tealAccent : Colors.tealAccent[400];
+
+      double porcentagem = 0;
+      if (!isSaldo) {
+        porcentagem =
+            carteira[i].moeda.preco * carteira[i].quantidade / totalCarteira;
+      } else {
+        porcentagem = (conta.saldo > 0) ? conta.saldo / totalCarteira : 0;
+      }
+      porcentagem *= 100;
+
+      return PieChartSectionData(
+        color: color,
+        value: porcentagem,
+        title: '${porcentagem.toStringAsFixed(0)}%',
+        radius: radius,
+        titleStyle: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87),
+      );
+    });
+  }
+
   loadGrafico() {
     return (conta.saldo <= 0)
         ? Container(
@@ -80,7 +125,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
             children: [
               AspectRatio(
                 aspectRatio: 1,
-                child: PieChart(PieChartData(
+                child: PieChart(
+                  PieChartData(
                     sectionsSpace: 5,
                     centerSpaceRadius: 110,
                     sections: loadCarteira(),
@@ -89,7 +135,9 @@ class _CarteiraPageState extends State<CarteiraPage> {
                         index = touch.touchedSection!.touchedSectionIndex;
                         setGraficoDados(index);
                       }),
-                    ))),
+                    ),
+                  ),
+                ),
               ),
               Column(
                 children: [
@@ -97,9 +145,10 @@ class _CarteiraPageState extends State<CarteiraPage> {
                     graficoLabel,
                     style: TextStyle(fontSize: 20, color: Colors.teal),
                   ),
-                  Text(graficoLabel,
-                      style: TextStyle(real.format(graficoValor),
-                          style: TextStyle(fontSize: 28)))
+                  Text(
+                    real.format(graficoValor),
+                    style: TextStyle(fontSize: 28),
+                  ),
                 ],
               )
             ],

@@ -26,7 +26,7 @@ class FavoritasRepository extends ChangeNotifier {
   _readFavoritas() {
     box.keys.forEach((moeda) async {
       Moeda m = await box.get(moeda);
-      _lista.add(moeda);
+      _lista.add(m);
       notifyListeners();
     });
   }
