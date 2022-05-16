@@ -154,4 +154,6 @@ class _CarteiraPageState extends State<CarteiraPage> {
             ],
           );
   }
+
+  loadHistorico() {}
 }
