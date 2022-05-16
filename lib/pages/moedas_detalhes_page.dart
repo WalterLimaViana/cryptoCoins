@@ -33,6 +33,18 @@ class _MoedasDetalhesPageState extends State<MoedasDetalhesPage> {
     }
   }
 
+  vender() async {
+    if (_form.currentState!.validate()) {
+      //salvar a venda
+      await conta.vender(widget.moeda, double.parse(_valor.text));
+
+      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Venda realizada com sucesso')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     readNumberFormat();
@@ -128,7 +140,7 @@ class _MoedasDetalhesPageState extends State<MoedasDetalhesPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.check),
+                        Icon(Icons.arrow_circle_down_sharp),
                         Padding(
                           padding: EdgeInsets.all(16),
                           child:
@@ -136,7 +148,24 @@ class _MoedasDetalhesPageState extends State<MoedasDetalhesPage> {
                         )
                       ],
                     )),
-              )
+              ),
+              Container(
+                alignment: Alignment.bottomCenter,
+                margin: EdgeInsets.only(top: 24),
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.redAccent),
+                    onPressed: vender,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.arrow_circle_up_outlined),
+                        Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text('Vender', style: TextStyle(fontSize: 20)),
+                        )
+                      ],
+                    )),
+              ),
             ],
           ),
         ));

@@ -85,6 +85,44 @@ class ContaRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  //método Vender
+  vender(Moeda moeda, double valor) async {
+    db = await DB.instance.database;
+    await db.transaction((txn) async {
+      //Verificar se a moeda já foi comprada
+      final posicaoMoeda = await txn.query(
+        'carteira',
+        where: 'sigla = ?',
+        whereArgs: [moeda.sigla],
+      );
+      //se não tem a moeda em carteira
+      if (posicaoMoeda.isEmpty) {
+        return Text('Você não possui moedas para vender!');
+      } //Já tem a moeda em carteira
+      else {
+        final atual = double.parse(posicaoMoeda.first['quantidade'].toString());
+        await txn.update('carteira',
+            {'quantidade': (atual - (valor / moeda.preco)).toString()},
+            where: 'sigla = ?', whereArgs: [moeda.sigla]);
+      }
+
+      //Inserir a venda no historico
+      await txn.insert('historico', {
+        'sigla': moeda.sigla,
+        'moeda': moeda.name,
+        'quantidade': (valor / moeda.preco).toString(),
+        'valor': valor,
+        'tipo_operacao': 'venda',
+        'data_operacao': DateTime.now().millisecondsSinceEpoch
+      });
+
+      //Atualizar o saldo
+      await txn.update('conta', {'saldo': saldo + valor});
+    });
+    await _initRepository();
+    notifyListeners();
+  }
+
   _getCarteira() async {
     _carteira = [];
     List posicoes = await db.query('carteira');

@@ -3,10 +3,11 @@ import 'package:cryptocoins/models/moeda.dart';
 class MoedaRepository {
   static List<Moeda> tabela = [
     Moeda(
-        icone: 'assets/images/bitcoin.png',
-        name: 'Bitcoin',
-        sigla: 'BTC',
-        preco: 164603.00),
+      icone: 'assets/images/bitcoin.png',
+      name: 'Bitcoin',
+      sigla: 'BTC',
+      preco: 164603.00,
+    ),
     Moeda(
         icone: 'assets/images/ethereum.png',
         name: 'Ethereum',
