@@ -1,4 +1,5 @@
 import 'package:cryptocoins/database/db.dart';
+import 'package:cryptocoins/models/historico.dart';
 import 'package:cryptocoins/models/moeda.dart';
 import 'package:cryptocoins/models/posicao.dart';
 import 'package:cryptocoins/repositories/moeda_repository.dart';
@@ -8,10 +9,12 @@ import 'package:sqflite/sqflite.dart';
 class ContaRepository extends ChangeNotifier {
   late Database db;
   List<Posicao> _carteira = [];
+  List<Historico> _historico = [];
   double _saldo = 0;
 
   get saldo => _saldo;
   List<Posicao> get carteira => _carteira;
+  List<Historico> get historico => _historico;
   ContaRepository() {
     _initRepository();
   }
@@ -19,6 +22,7 @@ class ContaRepository extends ChangeNotifier {
   _initRepository() async {
     await _getSaldo();
     await _getCarteira();
+    await _getHistorico();
   }
 
 // pegar o saldo da conta
@@ -93,6 +97,29 @@ class ContaRepository extends ChangeNotifier {
         quantidade: double.parse(posicao['quantidade']),
       ));
     });
+    notifyListeners();
+  }
+
+  _getHistorico() async {
+    _historico = [];
+    List operacoes = await db.query('historico');
+    operacoes.forEach(
+      (operacao) {
+        Moeda moeda = MoedaRepository.tabela.firstWhere(
+          (m) => m.sigla == operacao['sigla'],
+        );
+        _historico.add(
+          Historico(
+            dataOperacao:
+                DateTime.fromMillisecondsSinceEpoch(operacao['data_operacao']),
+            tipoOperacao: operacao['tipo_operacao'],
+            moeda: moeda,
+            valor: operacao['valor'],
+            quantidade: double.parse(operacao['quantidade']),
+          ),
+        );
+      },
+    );
     notifyListeners();
   }
 }
