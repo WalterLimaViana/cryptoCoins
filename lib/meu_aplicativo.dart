@@ -1,5 +1,6 @@
 import 'package:cryptocoins/pages/home_page.dart';
 import 'package:cryptocoins/pages/moedas_page.dart';
+import 'package:cryptocoins/widgets/auth_check.dart';
 import 'package:flutter/material.dart';
 
 class MeuAplicativo extends StatelessWidget {
@@ -13,7 +14,7 @@ class MeuAplicativo extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: AuthCheck(),
     );
   }
 }
