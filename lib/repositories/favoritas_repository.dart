@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cryptocoins/adapters/moeda_hive_adapter.dart';
+
 import 'package:cryptocoins/database/db_firestore.dart';
 import 'package:cryptocoins/models/moeda.dart';
 import 'package:cryptocoins/repositories/moeda_repository.dart';
@@ -14,8 +14,9 @@ class FavoritasRepository extends ChangeNotifier {
   // late LazyBox box;
   late FirebaseFirestore db;
   late AuthService auth;
+  MoedaRepository moedas;
 
-  FavoritasRepository({required this.auth}) {
+  FavoritasRepository({required this.auth, required this.moedas}) {
     _startRepository();
   }
 
@@ -35,20 +36,21 @@ class FavoritasRepository extends ChangeNotifier {
   // }
 
   _readFavoritas() async {
-    // box.keys.forEach((moeda) async {
-    //   Moeda m = await box.get(moeda);
-    //   _lista.add(m);
-    //   notifyListeners();
-    // });
     if (auth.usuario != null && _lista.isEmpty) {
-      final snapshot =
-          await db.collection('usuarios/${auth.usuario!.uid}/favoritas').get();
-      snapshot.docs.forEach((doc) {
-        Moeda moeda = MoedaRepository.tabela
-            .firstWhere((moeda) => moeda.sigla == doc.get('siglas'));
-        _lista.add(moeda);
-        notifyListeners();
-      });
+      try {
+        final snapshot = await db
+            .collection('usuarios/${auth.usuario!.uid}/favoritas')
+            .get();
+
+        snapshot.docs.forEach((doc) {
+          Moeda moeda = moedas.tabela
+              .firstWhere((moeda) => moeda.sigla == doc.get('sigla'));
+          _lista.add(moeda);
+          notifyListeners();
+        });
+      } catch (e) {
+        print('Sem id de usuário');
+      }
     }
   }
 
