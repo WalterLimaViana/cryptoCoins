@@ -105,47 +105,50 @@ class _MoedasPageState extends State<MoedasPage> {
     readNumberFormat();
     return Scaffold(
         appBar: appBarDinamica(),
-        body: ListView.separated(
-            itemBuilder: (BuildContext context, int moeda) {
-              return ListTile(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  leading: (selecionadas.contains(tabela[moeda]))
-                      ? CircleAvatar(
-                          child: Icon(Icons.check),
-                        )
-                      : SizedBox(
-                          child: Image.network(tabela[moeda].icone),
-                          width: 40,
-                        ),
-                  title: Row(
-                    children: [
-                      Text(tabela[moeda].name,
-                          style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.w500)),
-                      if (favoritas.lista
-                          .any((fav) => fav.sigla == tabela[moeda].sigla))
-                        Icon(Icons.star, color: Colors.amber, size: 12)
-                    ],
-                  ),
-                  trailing: Text(real.format(tabela[moeda].preco)),
-                  selected: selecionadas.contains(tabela[moeda]),
-                  selectedColor: Colors.indigo[50],
-                  onLongPress: () {
-                    setState(() {
-                      selecionadas.contains(tabela[moeda])
-                          ? selecionadas.remove(tabela[moeda])
-                          : selecionadas.add(tabela[moeda]);
+        body: RefreshIndicator(
+          onRefresh: () => moedas.checkPrecos(),
+          child: ListView.separated(
+              itemBuilder: (BuildContext context, int moeda) {
+                return ListTile(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    leading: (selecionadas.contains(tabela[moeda]))
+                        ? CircleAvatar(
+                            child: Icon(Icons.check),
+                          )
+                        : SizedBox(
+                            child: Image.network(tabela[moeda].icone),
+                            width: 40,
+                          ),
+                    title: Row(
+                      children: [
+                        Text(tabela[moeda].name,
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.w500)),
+                        if (favoritas.lista
+                            .any((fav) => fav.sigla == tabela[moeda].sigla))
+                          Icon(Icons.star, color: Colors.amber, size: 12)
+                      ],
+                    ),
+                    trailing: Text(real.format(tabela[moeda].preco)),
+                    selected: selecionadas.contains(tabela[moeda]),
+                    selectedColor: Colors.indigo[50],
+                    onLongPress: () {
+                      setState(() {
+                        selecionadas.contains(tabela[moeda])
+                            ? selecionadas.remove(tabela[moeda])
+                            : selecionadas.add(tabela[moeda]);
+                      });
+                    },
+                    onTap: () {
+                      mostrarDetalhes(tabela[moeda]);
                     });
-                  },
-                  onTap: () {
-                    mostrarDetalhes(tabela[moeda]);
-                  });
-            },
-            padding: EdgeInsets.all(16),
-            separatorBuilder: (_, ___) => Divider(),
-            itemCount: tabela.length),
+              },
+              padding: EdgeInsets.all(16),
+              separatorBuilder: (_, ___) => Divider(),
+              itemCount: tabela.length),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: selecionadas.isNotEmpty
             ? FloatingActionButton.extended(
