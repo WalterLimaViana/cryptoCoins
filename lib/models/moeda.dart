@@ -12,17 +12,18 @@ class Moeda {
   double mudancaAno;
   double mudancaPeriodoTotal;
 
-  Moeda(
-      {required this.baseId,
-      required this.icone,
-      required this.name,
-      required this.sigla,
-      required this.preco,
-      required this.timestamp,
-      required this.mudancaHora,
-      required this.mudancaDia,
-      required this.mudancaSemana,
-      required this.mudancaMes,
-      required this.mudancaAno,
-      required this.mudancaPeriodoTotal});
+  Moeda({
+    required this.baseId,
+    required this.icone,
+    required this.name,
+    required this.sigla,
+    required this.preco,
+    required this.timestamp,
+    required this.mudancaHora,
+    required this.mudancaDia,
+    required this.mudancaSemana,
+    required this.mudancaMes,
+    required this.mudancaAno,
+    required this.mudancaPeriodoTotal,
+  });
 }

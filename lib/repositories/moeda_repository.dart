@@ -96,7 +96,7 @@ class MoedaRepository extends ChangeNotifier {
 
   _setupDadosTableMoeda() async {
     if (await _moedasTableIsEmpty()) {
-      String uri = 'https://api.coinbase.com/v2/assets/search?base=BRL';
+      String uri = 'https://api.coinbase.com/v2/assets/prices?base=BRL';
 
       final response = await http.get(Uri.parse(uri));
 
