@@ -67,25 +67,72 @@ class _GraficoHistoricoState extends State<GraficoHistorico> {
 
   LineChartData getChartData() {
     return LineChartData(
-      gridData: FlGridData(show: false),
-      titlesData: FlTitlesData(show: false),
-      borderData: FlBorderData(show: false),
-      minX: 0,
-      maxX: maxX,
-      minY: minY,
-      maxY: maxY,
-      lineBarsData: [
-        LineChartBarData(
-          spots: dadosGrafico,
-          isCurved: true,
-          colors: cores,
-          barWidth: 2,
-          dotData: FlDotData(show: false),
-          belowBarData: BarAreaData(
-              show: true,
-              colors: cores.map((color) => color.withOpacity(0.15)).toList()),
-        )
-      ],
+        gridData: FlGridData(show: false),
+        titlesData: FlTitlesData(show: false),
+        borderData: FlBorderData(show: false),
+        minX: 0,
+        maxX: maxX,
+        minY: minY,
+        maxY: maxY,
+        lineBarsData: [
+          LineChartBarData(
+            spots: dadosGrafico,
+            isCurved: true,
+            colors: cores,
+            barWidth: 2,
+            dotData: FlDotData(show: false),
+            belowBarData: BarAreaData(
+                show: true,
+                colors: cores.map((color) => color.withOpacity(0.15)).toList()),
+          )
+        ],
+        lineTouchData: LineTouchData(
+            touchTooltipData: LineTouchTooltipData(
+                tooltipBgColor: Color(0xff343434),
+                getTooltipItems: (data) {
+                  return data.map((item) {
+                    final date = getDate(item.spotIndex);
+                    return LineTooltipItem(
+                        real.format(item.y),
+                        TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        children: [
+                          TextSpan(
+                              text: '\n $date',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white.withOpacity(.5),
+                              ))
+                        ]);
+                  }).toList();
+                })));
+  }
+
+  getDate(int index) {
+    DateTime date = dadosCompletos[index][1];
+    if (periodo != Periodo.ano && periodo != Periodo.total)
+      return DateFormat('dd/MM - hh:mm').format(date);
+    else
+      return DateFormat('dd/MM/y').format(date);
+  }
+
+  chartButton(Periodo p, String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: OutlinedButton(
+        onPressed: () => setState(() => periodo = p),
+        child: Text(label),
+        style: (periodo != p)
+            ? ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.grey),
+              )
+            : ButtonStyle(
+                foregroundColor:
+                    MaterialStateProperty.all(Colors.blueAccent[50])),
+      ),
     );
   }
 
@@ -101,17 +148,31 @@ class _GraficoHistoricoState extends State<GraficoHistorico> {
           aspectRatio: 2,
           child: Stack(
             children: [
-              ValueListenableBuilder(
-                valueListenable: loaded,
-                builder: (context, bool isLoaded, _) {
-                  return (isLoaded)
-                      ? LineChart(
-                          getChartData(),
-                        )
-                      : Center(
-                          child: CircularProgressIndicator(),
-                        );
-                },
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(children: [
+                  chartButton(Periodo.hora, '1H'),
+                  chartButton(Periodo.dia, '1D'),
+                  chartButton(Periodo.semana, '7D'),
+                  chartButton(Periodo.mes, 'Mês'),
+                  chartButton(Periodo.ano, 'Ano'),
+                  chartButton(Periodo.total, 'Tudo'),
+                ]),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 80),
+                child: ValueListenableBuilder(
+                  valueListenable: loaded,
+                  builder: (context, bool isLoaded, _) {
+                    return (isLoaded)
+                        ? LineChart(
+                            getChartData(),
+                          )
+                        : Center(
+                            child: CircularProgressIndicator(),
+                          );
+                  },
+                ),
               )
             ],
           )),
