@@ -1,4 +1,5 @@
 import 'package:cryptocoins/configs/app_settings.dart';
+import 'package:cryptocoins/pages/documentos_page.dart';
 import 'package:cryptocoins/repositories/conta_repository.dart';
 import 'package:cryptocoins/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -39,23 +40,39 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                     IconButton(onPressed: updateSaldo, icon: Icon(Icons.edit)),
               ),
               Divider(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
-                child: OutlinedButton(
-                    onPressed: () => context.read<AuthService>().logout(),
-                    style: OutlinedButton.styleFrom(primary: Colors.red),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text(
-                            'Sair do App',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        )
-                      ],
-                    )),
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Escanear um documento'),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DocumentosPage(),
+                      fullscreenDialog: true),
+                ),
+              ),
+              Divider(),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: OutlinedButton(
+                        onPressed: () => context.read<AuthService>().logout(),
+                        style: OutlinedButton.styleFrom(primary: Colors.red),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Text(
+                                'Sair do App',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            )
+                          ],
+                        )),
+                  ),
+                ),
               )
             ],
           )),
