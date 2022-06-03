@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cryptocoins/configs/app_settings.dart';
 import 'package:cryptocoins/pages/documentos_page.dart';
 import 'package:cryptocoins/repositories/conta_repository.dart';
 import 'package:cryptocoins/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +18,7 @@ class ConfiguracoesPage extends StatefulWidget {
 }
 
 class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
+  XFile? comprovante;
   @override
   Widget build(BuildContext context) {
     final conta = context.watch<ContaRepository>();
@@ -51,6 +55,15 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                 ),
               ),
               Divider(),
+              ListTile(
+                leading: Icon(Icons.attach_file),
+                title: Text('Enviar comprovante de depósito'),
+                onTap: selecionarComprovante,
+                trailing: comprovante != null
+                    ? Image.file(File(comprovante!.path))
+                    : null,
+              ),
+              Divider(),
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,
@@ -77,6 +90,16 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
             ],
           )),
     );
+  }
+
+  selecionarComprovante() async {
+    final ImagePicker picker = ImagePicker();
+    try {
+      XFile? file = await picker.pickImage(source: ImageSource.gallery);
+      if (file != null) setState(() => comprovante = file);
+    } catch (e) {
+      print(e);
+    }
   }
 
   updateSaldo() {
