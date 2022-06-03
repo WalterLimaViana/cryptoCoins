@@ -51,5 +51,15 @@
 		<string>Can I use the camera please?</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Can I use the mic please?</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>instagram-stories</string>
+			<string>facebook-stories</string>
+			<string>facebook</string>
+			<string>instagram</string>
+			<string>twitter</string>
+			<string>whatsapp</string>
+			<string>tg</string>
+		</array>
 	</dict>
 </plist>

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
 class DocumentosPage extends StatefulWidget {
-  DocumentosPage({Key? key}) : super(key: key);
+  const DocumentosPage({Key? key}) : super(key: key);
 
   @override
   State<DocumentosPage> createState() => _DocumentosPageState();
@@ -18,7 +18,6 @@ class _DocumentosPageState extends State<DocumentosPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadCameras();
   }
@@ -26,21 +25,21 @@ class _DocumentosPageState extends State<DocumentosPage> {
   _loadCameras() async {
     try {
       cameras = await availableCameras();
-      _startCameras();
+      _startCamera();
     } on CameraException catch (e) {
-      print(e.description);
+      debugPrint(e.description);
     }
   }
 
-  _startCameras() {
+  _startCamera() {
     if (cameras.isEmpty) {
-      print('Camera não foi encontrada');
+      debugPrint('Câmera não foi encontrada');
     } else {
-      _previewCameras(cameras.first);
+      _previewCamera(cameras.first);
     }
   }
 
-  _previewCameras(CameraDescription camera) async {
+  _previewCamera(CameraDescription camera) async {
     final CameraController cameraController = CameraController(
       camera,
       ResolutionPreset.high,
@@ -52,7 +51,7 @@ class _DocumentosPageState extends State<DocumentosPage> {
     try {
       await cameraController.initialize();
     } on CameraException catch (e) {
-      print(e.description);
+      debugPrint(e.description);
     }
 
     if (mounted) {
@@ -65,7 +64,7 @@ class _DocumentosPageState extends State<DocumentosPage> {
     size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Documento Oficial'),
+        title: const Text('Documento Oficial'),
         backgroundColor: Colors.grey[900],
         centerTitle: true,
         elevation: 0,
@@ -79,7 +78,8 @@ class _DocumentosPageState extends State<DocumentosPage> {
       floatingActionButton: (imagem != null)
           ? FloatingActionButton.extended(
               onPressed: () => Navigator.pop(context),
-              label: Text('Finalizar'),
+              label: const Text('Finalizar'),
+              backgroundColor: Colors.white,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -87,7 +87,7 @@ class _DocumentosPageState extends State<DocumentosPage> {
   }
 
   _arquivoWidget() {
-    return Container(
+    return SizedBox(
       width: size!.width - 50,
       height: size!.height - (size!.height / 3),
       child: imagem == null
@@ -101,8 +101,9 @@ class _DocumentosPageState extends State<DocumentosPage> {
 
   _cameraPreviewWidget() {
     final CameraController? cameraController = controller;
+
     if (cameraController == null || !cameraController.value.isInitialized) {
-      return Text("Widget para camera que não está disponível");
+      return const Text('Widget para Câmera que não está disponível');
     } else {
       return Stack(
         alignment: AlignmentDirectional.bottomCenter,
@@ -116,12 +117,16 @@ class _DocumentosPageState extends State<DocumentosPage> {
 
   _botaoCapturaWidget() {
     return Padding(
-      padding: EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.only(bottom: 24),
       child: CircleAvatar(
         radius: 32,
         backgroundColor: Colors.black.withOpacity(0.5),
         child: IconButton(
-          icon: Icon(Icons.camera_alt, color: Colors.white, size: 30),
+          icon: const Icon(
+            Icons.camera_alt,
+            color: Colors.white,
+            size: 30,
+          ),
           onPressed: tirarFoto,
         ),
       ),
@@ -134,9 +139,9 @@ class _DocumentosPageState extends State<DocumentosPage> {
     if (cameraController != null && cameraController.value.isInitialized) {
       try {
         XFile file = await cameraController.takePicture();
-        if (mounted) setState(() => imagem != file);
+        if (mounted) setState(() => imagem = file);
       } on CameraException catch (e) {
-        print(e.description);
+        debugPrint(e.description);
       }
     }
   }
