@@ -103,7 +103,7 @@ class _DocumentosPageState extends State<DocumentosPage> {
     final CameraController? cameraController = controller;
 
     if (cameraController == null || !cameraController.value.isInitialized) {
-      return const Text('Widget para Câmera que não está disponível');
+      return const Text('Widget para Câmera');
     } else {
       return Stack(
         alignment: AlignmentDirectional.bottomCenter,
